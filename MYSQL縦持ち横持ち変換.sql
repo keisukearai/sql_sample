@@ -1,5 +1,8 @@
+-- MySQl接続後に「source ファイル名」
+-- 一旦テーブル削除
 drop table SHOP;
 
+-- テーブル作成
 CREATE TABLE SHOP(
     SEQ INT NOT NULL,
     USER_ID VARCHAR(5),
@@ -23,7 +26,8 @@ VALUES
     (9, 'D', 'tokyo', 1000),
     (10, 'E', 'nagoya', 1000),
     (11, 'A', 'tokyo', 500);
----
+
+--- 縦持ち → 横持ちへの変換
 SELECT
     USER_ID,
     SUM(CASE AREA WHEN 'tokyo' THEN SALE ELSE 0 END) AS TOKYO,
@@ -36,7 +40,8 @@ GROUP BY
     USER_ID
 ORDER BY
     USER_ID
----
+    
+--- Viewの作成(横持ちテーブル作成の省略)
 CREATE VIEW V_SHOP AS
 SELECT
     USER_ID,
@@ -50,9 +55,11 @@ GROUP BY
     USER_ID
 ORDER BY
     USER_ID
----
+
+--- View作成の確認
 select * from V_SHOP
----
+
+--- 横持ち → 縦持ちへの変換
 select USER_ID, 'tokyo' as AREA, TOKYO as SALE from V_SHOP
 union all
 select USER_ID, 'osaka' as AREA, OSAKA as SALE from V_SHOP
